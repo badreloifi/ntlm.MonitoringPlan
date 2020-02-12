@@ -70,9 +70,24 @@ namespace ntlm.MonitoringPlan.Tests
         }
 
         [TestMethod]
-        public void SendErrorMail(Exception ex)
+        public void SendErrorMail()
         {
-            srv.SendErrorMail(ex);
+            List<string> M = new List<string>
+            {
+                "badreloifi@gmail.com",
+                "eloifi@et.esiea.fr"
+            };
+            srv.MailTo = M;
+            var action = false;
+            try
+            {
+                if (action == false)
+                    throw new Exception("test Mail.");
+               
+            }catch(Exception ex)
+            {
+                 srv.SendErrorMail(ex);
+            }
         }
 
 
@@ -82,8 +97,5 @@ namespace ntlm.MonitoringPlan.Tests
             srv.Host = @"80.248.213.285";
             await srv.PlanAsync();
         }
-
-
-
     }
 }

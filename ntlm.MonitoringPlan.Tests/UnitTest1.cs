@@ -14,9 +14,10 @@ namespace ntlm.MonitoringPlan.Tests
         private const string Password = @"+m]u<CxGKy<2}p,R";
         private const string MailTo = @"badreloifi@gmail.com";
         private static  string[] Services = { "http://www.sdpv.com/", "http://lesbelleslettres.com/" };*/
+        private const string PathConfigJson = @"C:\Users\badr\Documents\GitHub\NTLM\ntlm.MonitoringPlan\JsonConfig.json";
+        private const string PathConfig = @"C:\Users\badr\Documents\GitHub\NTLM\ntlm.MonitoringPlan\config.txt";
 
-
-        public MonitoringService srv = new MonitoringService();
+        public MonitoringService srv = new MonitoringService(PathConfig, PathConfigJson);
 
         [TestMethod]
         public void SerializationFileConfig()
@@ -88,14 +89,6 @@ namespace ntlm.MonitoringPlan.Tests
             {
                  srv.SendErrorMail(ex);
             }
-        }
-
-
-        [TestMethod]
-        public async Task SendEmailOnError()
-        {
-            srv.Host = @"80.248.213.285";
-            await srv.PlanAsync();
         }
     }
 }

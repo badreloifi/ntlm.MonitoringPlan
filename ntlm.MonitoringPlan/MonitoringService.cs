@@ -15,13 +15,14 @@ namespace ntlm.MonitoringPlan
     public class MonitoringService
     {
         public static FtpWebRequest client;
-        public MonitoringService()
+        public MonitoringService(string PathConfig, string PathConfigJson)
         {
-          
-            
-
+            this.PathConfig = PathConfig;
+            this.PathConfigJson = PathConfigJson;
         }
 
+        public string PathConfig { get; set; }
+        public string PathConfigJson { get; set; }
         public string Host { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -31,15 +32,15 @@ namespace ntlm.MonitoringPlan
 
         public void SerializationFileConfig()
         {
-            var Path = @".\config.txt";
-            var configFile = File.ReadAllText(Path);
+            //var Path = @".\config.txt";
+            var configFile = File.ReadAllText(PathConfig);
             string jsonString = JsonConvert.SerializeObject(configFile, Formatting.Indented);
-            File.WriteAllText(@".\JsonConfig.json", jsonString);  
+            File.WriteAllText(PathConfigJson, jsonString);  
         }
 
         public void  DeSerializationFileConfig()
         {
-                var JsonConfigFile = File.ReadAllText(@".\JsonConfig.json");
+                var JsonConfigFile = File.ReadAllText(PathConfigJson);
                 var jConfig = JsonConvert.DeserializeObject(JsonConfigFile).ToString();
                 RootObject Config = JsonConvert.DeserializeObject<RootObject>(jConfig);
 
@@ -125,8 +126,7 @@ namespace ntlm.MonitoringPlan
                     // Above three lines can be replaced with new helper method below
                     // string responseBody = await client.GetStringAsync(uri);
 
-                    Console.WriteLine(responseBody);
-
+                    Console.WriteLine(response.EnsureSuccessStatusCode());
                 }
                 catch (HttpRequestException e)
                 {

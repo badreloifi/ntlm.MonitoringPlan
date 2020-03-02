@@ -1,0 +1,24 @@
+﻿{
+  "mailTo": ["", ""],
+  "sender": {
+    "smtp": "",
+    "email": "",
+    "credentials": {
+      "userName": "",
+      "password": ""
+    }
+  },
+  "services": [
+    {
+      "name": "Mon service",
+      "server": "NTLM01",
+      "mailTo": [ ],
+      "credentials": {
+        "userName": "",
+        "password": ""
+      },
+      "url": "",
+      "port": 0
+    }
+  ]
+}

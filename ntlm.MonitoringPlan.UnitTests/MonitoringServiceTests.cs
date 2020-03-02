@@ -1,24 +1,18 @@
-﻿namespace ntlm.MonitoringPlan.Tests
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace ntlm.MonitoringPlan.UnitTests
 {
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
-    public class UnitTest1
+    [TestClass]
+    public class MonitoringServiceTests
     {
-        /*private const string Host = @"80.248.213.227";
-        private const string UserName = @"FTP_W6";
-        private const string Password = @"+m]u<CxGKy<2}p,R";
-        private const string MailTo = @"badreloifi@gmail.com";
-        private static  string[] Services = { "http://www.sdpv.com/", "http://lesbelleslettres.com/" };*/
         private const string PathConfig = @"config.json";
 
 
-        public UnitTest1()
+        public MonitoringServiceTests()
         {
 
         }
@@ -27,7 +21,7 @@
         public async Task TestGoogle_Ok()
         {
             // Given
-            var srv = new MonitoringService();            
+            var srv = new MonitoringService();
             var google = new Service()
             {
                 Uri = "https://www.google.com"
@@ -51,7 +45,44 @@
             return projectDirectory + "\\" + fileName;
         }
 
-      
+        [TestMethod]
+        public async Task Test_ServiceIsDown_MailSent()
+        {
+            // Given
+            var srv = new MonitoringService();
+            var down = new DownService();
+
+            // When
+            await srv.Test(down);
+
+            // Then : check your email
+        }
+
+        /// <summary>
+        /// Service that is always down.
+        /// </summary>
+        public class DownService : Service
+        {
+            public DownService()
+            {
+                Uri = "https://www.google.com";
+                Sender = new EmailAccount()
+                {
+                    Email = "ntlm.tech@gmail.com",
+                    Credentials = new Credentials() {
+                        UserName = "",
+                        Password = ""
+                    }
+                };
+                MailTo = new string[] { "badreloifi@gmail.com" };
+            }
+            public override Task Test()
+            {
+                throw new ServiceDownException(this, new Exception());
+            }
+
+        }
+
 
         [TestMethod]
         public void SerializationFileConfig()
@@ -65,13 +96,7 @@
             // Then
             Assert.IsNotNull(cfg);
         }
-
-        [TestMethod]
-        public void DeSerializationFileConfig()
-        {
-            srv.DeserializeConfigFile();
-
-        }
+        
 
         [TestMethod]
         public void IsServerFTPActive()
@@ -81,7 +106,7 @@
             srv.UserName = @"FTP_W6";
             srv.Password = @"+m]u<CxGKy<2}p,R";
             Assert.IsTrue(srv.IsServerFTPActive());
-            
+
         }
 
         [TestMethod]
@@ -124,10 +149,11 @@
             {
                 if (action == false)
                     throw new Exception("test Mail.");
-               
-            }catch(Exception ex)
+
+            }
+            catch (Exception ex)
             {
-                 srv.SendErrorMail(ex);
+                srv.SendErrorMail(ex);
             }
         }
     }

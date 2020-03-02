@@ -1,0 +1,13 @@
+﻿{
+"MonitoringService": [
+				{
+					"Host":"80.248.213.227",
+					"UserName":"FTP_W6",
+					"Password":"+m]u<CxGKy<2}p,R",
+					"MailTo": ["badreloifi@gmail.com", "eloifi@et.esiea.fr"],
+					"Services": ["http://www.sdpv.com/", "http://www.lesbelleslettres.com/"],
+					"Port":21
+				}
+			]
+
+}

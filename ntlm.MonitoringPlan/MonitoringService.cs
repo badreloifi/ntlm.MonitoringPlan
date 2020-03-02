@@ -61,7 +61,7 @@ namespace ntlm.MonitoringPlan
                 client = (FtpWebRequest)WebRequest.Create(string.Format(@"ftp://{0}:{1}", Host, Port));
                 client.Credentials = new NetworkCredential(UserName, Password);
                 client.Method = WebRequestMethods.Ftp.ListDirectory;
-                response = client.GetResponse();   
+                response = client.GetResponse();
                 return true;
             }
             catch(WebException)

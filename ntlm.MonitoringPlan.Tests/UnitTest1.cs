@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-
-namespace ntlm.MonitoringPlan.Tests
+﻿namespace ntlm.MonitoringPlan.Tests
 {
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading.Tasks;
+
     [TestClass]
     public class UnitTest1
     {
@@ -18,6 +19,20 @@ namespace ntlm.MonitoringPlan.Tests
         private const string PathConfig = @"C:\Users\badr\Documents\GitHub\NTLM\ntlm.MonitoringPlan\config.txt";
 
         public MonitoringService srv = new MonitoringService(PathConfig, PathConfigJson);
+
+        private string getFilePath(string fileName)
+        {
+            // This will get the current WORKING directory (i.e. \bin\Debug)
+            string workingDirectory = Environment.CurrentDirectory;
+            // or: Directory.GetCurrentDirectory() gives the same result
+
+            // This will get the current PROJECT directory
+            string projectDirectory = Directory.GetParent(workingDirectory).Parent.FullName;
+
+            return projectDirectory + "\\" + fileName;
+        }
+
+      
 
         [TestMethod]
         public void SerializationFileConfig()

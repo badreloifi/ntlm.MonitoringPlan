@@ -6,9 +6,8 @@ namespace ntlm.BackupPlan.Console
         static void Main(string[] args)
         {
             string PathConfig = args[0];
-            string PathConfigJson = args[1];
-            var srv = new MonitoringPlan.MonitoringService(PathConfig, PathConfigJson);
-            var action = srv.PlanAsync();
+            var srv = new MonitoringPlan.MonitoringService();
+            var action = srv.Test(PathConfig);
             Task.WaitAll(action);
         }
     }

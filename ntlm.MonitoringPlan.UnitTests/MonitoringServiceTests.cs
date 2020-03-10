@@ -33,7 +33,7 @@ namespace ntlm.MonitoringPlan.UnitTests
             // Then
         }
 
-        private string getFilePath(string fileName)
+        private string GetFilePath(string fileName)
         {
             // This will get the current WORKING directory (i.e. \bin\Debug)
             string workingDirectory = Environment.CurrentDirectory;
@@ -58,6 +58,7 @@ namespace ntlm.MonitoringPlan.UnitTests
             // Then : check your email
         }
 
+
         /// <summary>
         /// Service that is always down.
         /// </summary>
@@ -76,6 +77,7 @@ namespace ntlm.MonitoringPlan.UnitTests
                 };
                 MailTo = new string[] { "badreloifi@gmail.com" };
             }
+
             public override Task Test()
             {
                 throw new ServiceDownException(this, new Exception());
@@ -91,7 +93,7 @@ namespace ntlm.MonitoringPlan.UnitTests
             var srv = new MonitoringService();
 
             // When
-            var cfg = srv.DeserializeConfiguration(getFilePath("config2.json");
+            var cfg = srv.DeserializeConfiguration(GetFilePath("config.json"));
 
             // Then
             Assert.IsNotNull(cfg);
@@ -99,62 +101,63 @@ namespace ntlm.MonitoringPlan.UnitTests
         
 
         [TestMethod]
-        public void IsServerFTPActive()
+        public async Task IsServerFTPActive()
         {
-            srv.Host = @"80.248.213.227";
-            srv.Port = 21;
-            srv.UserName = @"FTP_W6";
-            srv.Password = @"+m]u<CxGKy<2}p,R";
-            Assert.IsTrue(srv.IsServerFTPActive());
+            //Given
+            var srv = new MonitoringService();
+            var FTP = new Service()
+            {
+                Uri = "ftp://80.248.213.227:21",
+                Credentials = new Credentials()
+                {
+                    UserName = @"FTP_W6",
+                    Password = @"+m]u<CxGKy<2}p,R"
+                },
+            };
+
+            //When
+            await srv.Test(FTP);
+
+            //Then
+            Assert.IsTrue(FTP.IsServerFTPActive());
 
         }
 
         [TestMethod]
-        public void IsServerActive()
+        public async Task IsServerActive()
         {
-            srv.Host = @"80.248.213.227";
-            Assert.IsTrue(srv.IsServerActive());
+            //Given
+            var srv = new MonitoringService();
+            var ServerActive = new Service()
+            {
+                Uri = "icmp://80.248.213.227"
+            };
+
+            //When
+            await srv.Test(ServerActive);
+
+            //Then
+            Assert.IsTrue(ServerActive.IsServerActive());
 
         }
 
         [TestMethod]
         public async Task IsServicesOKAsync()
         {
-            List<string> S = new List<string>
+            //Given
+            var srv = new MonitoringService();
+            var ServicesOk = new Service()
             {
-                "http://www.sdpv.com/",
-                "http://www.lesbelleslettres.com/"
+                Uri = "http://www.sdpv.com/",
+                
             };
-            srv.Services = S;
-            await srv.IsServicesOKAsync();
+
+            //When
+            await srv.Test(ServicesOk);
+
+            //Then
+            
         }
 
-        [TestMethod]
-        public async Task Plan()
-        {
-            await srv.PlanAsync();
-        }
-
-        [TestMethod]
-        public void SendErrorMail()
-        {
-            List<string> M = new List<string>
-            {
-                "badreloifi@gmail.com",
-                "eloifi@et.esiea.fr"
-            };
-            srv.MailTo = M;
-            var action = false;
-            try
-            {
-                if (action == false)
-                    throw new Exception("test Mail.");
-
-            }
-            catch (Exception ex)
-            {
-                srv.SendErrorMail(ex);
-            }
-        }
     }
 }

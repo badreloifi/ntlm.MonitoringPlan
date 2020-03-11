@@ -117,8 +117,8 @@
             txt.AppendLine(exception.StackTrace); // retourne précisemment l'erreur.
 
             MailMessage mail = new MailMessage(); // determine la variable de création de l' email.
-            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com"); // determine le smtp client avec sont Adresse serveur smtp.
-            mail.From = new MailAddress("ntlm.tech@gmail.com", "ntlm.tech"); // Adresse email source.
+            SmtpClient SmtpServer = new SmtpClient(Sender.Smtp); // determine le smtp client avec sont Adresse serveur smtp.
+            mail.From = new MailAddress(Sender.Email, Sender.DisplayName); // Adresse email source.
 
             if (exception.Service.MailTo != null)
                 foreach (var email in exception.Service.MailTo)
@@ -128,7 +128,7 @@
             mail.Body = txt.ToString(); // écrit le message d'erreur dans le coprs 
 
             SmtpServer.Port = 587; // port associée au serveur smtp que nous voulons joindre.
-            SmtpServer.Credentials = new NetworkCredential(mail.From.Address, "Resistance979091");
+            SmtpServer.Credentials = new NetworkCredential(Sender.Credentials.UserName, Sender.Credentials.Password);
             SmtpServer.EnableSsl = true;
             SmtpServer.Send(mail); // envoie l'email avec toute les infos créer dans la variable mail.
 

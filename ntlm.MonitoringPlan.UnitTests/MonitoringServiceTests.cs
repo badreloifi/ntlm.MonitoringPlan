@@ -69,10 +69,12 @@ namespace ntlm.MonitoringPlan.UnitTests
                 Uri = "https://www.google.com";
                 Sender = new EmailAccount()
                 {
+                    Smtp = "smtp.gmail.com",
                     Email = "ntlm.tech@gmail.com",
+                    DisplayName = "ntlm.tech",
                     Credentials = new Credentials() {
-                        UserName = "",
-                        Password = ""
+                        UserName = "ntlm.tech@gmail.com",
+                        Password = "Resistance979091"
                     }
                 };
                 MailTo = new string[] { "badreloifi@gmail.com" };
